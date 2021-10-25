@@ -1,0 +1,12 @@
+# Node
+node_modules
+
+# miniflare
+.mf
+
+# build
+content.json
+worker.js
+
+# Misc
+.DS_Store

@@ -1,0 +1,33 @@
+{
+  "name": "workaholic-site-template",
+  "version": "0.1.0",
+  "description": "Template for setting up a workaholic site",
+  "main": "worker.js",
+  "scripts": {
+    "prestart": "workaholic preview content.json",
+    "start": "miniflare --kv-persist --disable-cache",
+    "generate": "workaholic generate content.json",
+    "upload": "workaholic publish content.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edmundhung/workaholic-site-template.git"
+  },
+  "keywords": [
+    "Clouflare",
+    "Worker",
+    "KV",
+    "Workaholic"
+  ],
+  "author": "Edmund Hung <me@edmund.dev> (https://edmund.dev)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/edmundhung/workaholic-site-template/issues"
+  },
+  "homepage": "https://github.com/edmundhung/workaholic-site-template#readme",
+  "dependencies": {
+    "@cloudflare/wrangler": "^1.19.4",
+    "@workaholic/core": "^0.3.0",
+    "miniflare": "^1.4.1"
+  }
+}

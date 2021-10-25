@@ -1,0 +1,24 @@
+name = "workaholic-site-example"
+type = "javascript"
+account_id = "c63d756a160ad09cd9a82553c77e9174"
+zone_id = "622ad109259227680bce9543285b50c3"
+route = "example.workaholic.site/*"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "CONTENT"
+preview_id = "ae0269ed35d4417ba1a3edc640d9699a"
+id = "198748d3daf04e888c0d124b7a12498e"
+
+[build]
+command = "npx workaholic build worker.js"
+
+[build.upload]
+format="service-worker"
+
+[workaholic]
+source = "content"
+binding = "CONTENT"
+
+[workaholic.site]
+basename = "/api"
