@@ -15,8 +15,6 @@ command = "npx workaholic build worker.js"
 
 [build.upload]
 format="service-worker"
-dir = "."
-main = "./worker.js"
 
 [workaholic]
 source = "content"
