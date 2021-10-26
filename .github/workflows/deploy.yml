@@ -3,6 +3,7 @@ on:
   push:
     branches: main
     paths:
+      - '.github/workflows/deploy.yml'
       - 'package.json'
       - 'package-lock.json'
       - 'wrangler.toml'
@@ -29,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build worker
-        run : npx workaholic build worker.js
+        run : npx workaholic build worker.js --minify
       - name: Deploy worker
         run: npx wrangler publish
         env:
