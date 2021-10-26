@@ -7,8 +7,8 @@ workers_dev = true
 
 [[kv_namespaces]]
 binding = "CONTENT"
-preview_id = "ae0269ed35d4417ba1a3edc640d9699a"
-id = "198748d3daf04e888c0d124b7a12498e"
+preview_id = "2a5bc0bcea334efcb92c51892b5a8e3c"
+id = "28c5833cb7494566ba868166bddc234b"
 
 [build]
 command = "npx workaholic build worker.js"
