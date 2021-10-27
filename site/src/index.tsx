@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from 'react-query'
 import Demo from './Demo';
 import './tailwind.css';
 
+const queryClient = new QueryClient();
+
 ReactDOM.render(
   <React.StrictMode>
-    <Demo />
+    <QueryClientProvider client={queryClient}>
+      <Demo />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

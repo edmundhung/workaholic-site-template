@@ -21,7 +21,7 @@ source = "content"
 binding = "CONTENT"
 
 [workaholic.site]
-basename = "/api"
+basename = ""
 
 [[workaholic.plugins]]
 source = "@workaholic/core/src/plugins/plugin-md"
