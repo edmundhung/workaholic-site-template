@@ -1,8 +1,8 @@
-name = "workaholic-site-example"
+name = "workaholic-site-demo"
 type = "javascript"
 account_id = "c63d756a160ad09cd9a82553c77e9174"
 zone_id = "622ad109259227680bce9543285b50c3"
-route = "example.workaholic.site/*"
+route = "demo.workaholic.site/*"
 workers_dev = true
 
 [[kv_namespaces]]
