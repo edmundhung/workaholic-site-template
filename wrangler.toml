@@ -27,4 +27,4 @@ basename = ""
 source = "@workaholic/core/src/plugins/plugin-md"
 
 [[workaholic.plugins]]
-source = "@workaholic/core/src/plugins/plugin-list"
+source = "./plugins/list.ts"

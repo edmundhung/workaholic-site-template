@@ -11,7 +11,7 @@ async function getContent(slug: string) {
 }
 
 async function listContents(path = '') {
-  const response = await fetch('/references');
+  const response = await fetch('/list');
   const data = await response.json();
 
   return data;
