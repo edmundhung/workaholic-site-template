@@ -47,8 +47,8 @@ buildOptions = { foo = "bar" }
 queryOptions = { baz = "qux" }
 
 [workaholic.site]
-## Optional (default: ""). Include an additional basename to the url mapping logic for the built-in API worker
-## Requests received are forwarded to the origin if the url does not match the basename
+## Optional (default: ""). Include an additional basename to the URL mapping logic for the built-in API worker
+## Requests received are forwarded to the origin if the URL does not match the basename
 ## This is useful especially in combination with Cloudflare Pages
 basename = "/api"
 ```
