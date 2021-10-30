@@ -21,11 +21,4 @@ export function setupBuild() {
   };
 }
 
-export function setupQuery() {
-  const query = plugin.setupQuery();
-
-  return {
-    ...query,
-    namespace: 'list',
-  };
-}
+export const setupQuery = plugin.setupQuery;

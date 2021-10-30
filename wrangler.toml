@@ -21,10 +21,10 @@ source = "content"
 binding = "CONTENT"
 
 [workaholic.site]
-basename = ""
+basename = "/api"
 
 [[workaholic.plugins]]
-source = "@workaholic/core/src/plugins/plugin-md"
+source = "@workaholic/core/src/plugins/plugin-frontmatter"
 
 [[workaholic.plugins]]
 source = "./plugins/list.ts"
