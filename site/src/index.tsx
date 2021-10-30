@@ -4,7 +4,13 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import Demo from './Demo';
 import './tailwind.css';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
