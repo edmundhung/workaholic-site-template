@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useQuery } from 'react-query';
-import { BrowserRouter, Route, Routes, Outlet, useParams, NavLink } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Outlet, useParams, NavLink, Link } from 'react-router-dom';
 
 async function getContent(slug: string) {
   const response = await fetch(`/api/data/${slug}`);
@@ -26,7 +26,32 @@ function Documentation() {
 
   return (
     <div className="p-4">
-      <ReactMarkdown className="prose prose-sm">{data}</ReactMarkdown>
+      <ReactMarkdown
+        className="prose prose-sm"
+        components={{
+          a({ node, className, href, children }) {
+            const isAbsoluteURL =
+              href?.startsWith('https://') ||
+              href?.startsWith('http://') ||
+              href?.startsWith('//');
+
+            if (isAbsoluteURL) {
+              return (
+                <a
+                  className={className}
+                  href={href ?? ''}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {children}
+                </a>
+              );
+            }
+
+            return <Link className={className} to={href ?? ''}>{children}</Link>;
+          },
+        }}
+      >{data}</ReactMarkdown>
     </div>
   );
 }
