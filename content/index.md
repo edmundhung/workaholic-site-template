@@ -5,26 +5,76 @@ order: 1
 
 # Workaholic
 
-Workaholic is a toolkit for managing your files as Worker KV entry. It is...
+Workaholic is a toolkit for serving your files as Worker KV entries. It is...
 
 - **Extensible** - Customisation possible with plugins
 - **Batteries-included** - Built-in plugins provided for common usages
 - **No code solution** - Ship your data as an API without the need to write a worker
 
-## Why?
+## How is it different from serving assets files directly?
 
-I was building a blog on Cloudflare Workers and I wanna have a way to streamline the process in parsing my markdown files with additional processing together with the ability to preview them using miniflare and uploading them to Worker KV.
+There are 2 main reasons you might want to use workaholic:
+
+1. Preprocessing: Instead of re-processing the files every time on the server or client, the plugin system allows you to preprocess it once and save the result directly in Worker KV.
+2. Indexing: The KV `List` API is rather limited on how you can query entries and also relatively costly compared to the `Get` call. Workaholic enables you a simpler setup on building your own index which you can retrieve with a single `Get`.
+
+## Any example?
+
+To get a better understanding of what it does, it is important to take a look at both the [demo site](https://demo.workaholic.site) and its [source code](https://github.com/edmundhung/workaholic-site-template) together.
+
+
+In the repository, there are a few things you should be aware of:
+
+1. The `content` directory - This is where the content of the demo site is located
+2. The `plugins` directory - This gives an example of how you can set up a custom plugin
+3. The `wrangler.toml` file - This lets you configure both wrangler and the workaholic cli
+
+The demo site itself is just a basic React app that could be found under the `site` directory and is served with the Cloudflare Pages. What is important here is how the content is being served with the Cloudflare Workers on top of it. You will not be able to find the worker script from the repository though, as it is built with the workaholic CLI right within the [deploy workflow](https://github.com/edmundhung/workaholic-site-template/blob/main/.github/workflows/deploy.yml).
+
+For example, if you check the network tab from the inspecter, there are 2 API requests sent out when you visit the demo site:
+
+### 1. https://demo.workaholic.site/api/data/index
+
+```json
+{
+  "content": "# Workaholic\n\nWorkaholic is a toolkit for managing your files as Worker KV entry. It is...(omitted)",
+  "metadata": {
+    "title": "Workaholic",
+    "order": 1
+  }
+}
+```
+
+The first API response is basically what's being written on [/content/index.md](https://github.com/edmundhung/workaholic-site-template/blob/main/content/index.md), but with the front matter parsed and presented as `metadata` in the response. This is done by the `plugin-frontmatter` configured in the `wrangler.toml`. For details, check out the [Plugins](./plugins) section.
+
+### 2. https://demo.workaholic.site/api/list
+
+```json
+[
+  {
+    "slug": "index",
+    "metadata": { "title":"Workaholic", "order": 1 }
+  },
+  {
+    "slug": "how-it-works",
+    "metadata": { "title": "How it works", "order": 2 }
+  },
+  {
+    "slug": "plugins",
+    "metadata": { "title": "Plugins", "order": 3 }
+  },
+  {
+    "slug": "configuration",
+    "metadata": { "title": "Configuration", "order": 4 }
+  }
+]
+```
+
+The second API response is the list of pages available. This is achieved using the `plugin-list` which gathers the `slug` of the page with its `metadata` based on the provided path. But it is referenced through a custom plugin defined in [/plugins/list.ts](https://github.com/edmundhung/workaholic-site-template/blob/main/plugins/list.ts) to add a custom sorting logic by the `order` field. It is important to note that this plugin must be configured after the `plugin-frontmatter` to be effective. As it expects the `order` field to be presented in the `metadata`.
 
 ## Is it production-ready?
 
 No. This project started as a very simple script. But eventually turned into an over-engineered solution with a much wider scope. It is experimental and probably buggy at the moment. But I wish this demo can give you an idea of what it is capable of for now.
-
-## How is it different from serving assets files directly?
-
-There are two main reasons you might want to use workaholic:
-
-1. Preprocessing: Instead of re-processing the files every time on the server or client, the plugin system allows you to preprocess it once and save the result directly in Worker KV.
-2. Indexing: The KV `List` API is rather limited on how you can query entries and also relatively costly compared to the `Get` call. Workaholic enables you a simpler setup on building your own index which you can retrieve with a single `Get`.
 
 ## Known issues
 
