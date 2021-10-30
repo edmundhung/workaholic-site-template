@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useQuery } from 'react-query';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { BrowserRouter, Route, Routes, Outlet, useParams, NavLink, Link } from 'react-router-dom';
 
 async function getContent(slug: string) {
@@ -49,6 +50,26 @@ function Documentation() {
             }
 
             return <Link className={className} to={href ?? ''}>{children}</Link>;
+          },
+          pre({ node, ...props }) {
+            return <figure {...props} />;
+          },
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '');
+
+            if (inline || !match) {
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            }
+
+            return (
+              <SyntaxHighlighter className={className} language={match[1]}>
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            );
           },
         }}
       >{data}</ReactMarkdown>
