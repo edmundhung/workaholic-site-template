@@ -33,13 +33,13 @@ format = "service-worker"
 # Configuration for Workaholic
 
 [workaholic]
-## Required. Relative path to the source directory
+## Required. Relative path of the data source directory
 source = "content"
 ## Required. The name of the binding as defined under `kv_namespaces` above
 binding = "CONTENT"
 
 [[workaholic.plugins]]
-## Required. Relative path to the source file
+## Required. Relative path of the plugin file
 source = "./plugins/list.ts"
 ## Optional (default: {}). Options passed to the `setupBuild` function
 buildOptions = { foo = "bar" }

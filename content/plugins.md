@@ -9,15 +9,15 @@ Before going through this section, it is strongly recommended to read the [How i
 
 ## Built-in plugins
 
-Workaholic provides a list of [plugins](https://github.com/edmundhung/workaholic/tree/main/src/plugins) by default:
+Workaholic provides a list of [plugins](https://github.com/edmundhung/workaholic/tree/main/src/plugins) by default, they include
 
 - `plugin-frontmatter`: Parse the front matter as `metadata` with the markdown content kept as `value`
-- `plugin-json`: Extract the `metadata` from the JSON data and repack the remaining data in `value`
-- `plugin-toml`: Parse TOML as JSON and extract the `metadata` key as `Metadata`, keeping the rest as `value`
+- `plugin-json`: Extract the **metadata** property from the JSON data as `metadata` and keep the rest in `value`
+- `plugin-toml`: Parse TOML as JSON and process the JSON data as `plugin-json`
 - `plugin-yaml`: Similar to `plugin-toml`, parsing YAML as JSON instead
-- `plugin-list`: Create a list entry per directory with a query option to include entries in subfolders (default: `false`)
+- `plugin-list`: Create an index per directory. Provide a query option `includeSubfolders` to control if  entries in subfolders are counted or not (default: `false`)
 
-These plugins will be set only if you have no `plugins` configured in the `wrangler.toml`. When you start adding any custom plugin, you are required to specify them yourself by specifying the `source` as **@workaholic/core/src/plugins/:plugin-name**.
+These plugins will be set only if you have no `plugins` configured in the `wrangler.toml`. When you start adding any other custom plugin, you are required to specify all plugins including the above plugins yourself. You can specify the built-in plugins with `source = @workaholic/core/src/plugins/:plugin-name`.
 
 ## Plugin interface
 
@@ -45,9 +45,9 @@ interface Entry {
 }
 ```
 
-The first hook provided is `transform`. This is the first customisation you can apply on each entry right after the core finish parsing the source directory. Usage includes parsing specific file formats into JSON and inferring additional data.
+The first hook provided is `transform`. This is the first customisation you can apply on each entry right after the core finish parsing the source directory. It could be used for parsing specific file formats into JSON and inferring additional data.
 
-The second hook provided is `derive`. It will be called only after the `transform` phase is completed. Usage would be mainly related to indexing. Be aware that this hook should return new entries only. You are also required to provide a `namespace` in the Build object when using this hook. This namespace will be used to prefix the key of each entry returned.
+The second hook provided is `derive`. It will be called only after the `transform` phase is completed. It is mainly used for indexing. Be aware that this hook should return new entries only. You are also required to provide a `namespace` in the Build object when using this hook. This namespace will be used to prefix the key of each entry returned.
 
 > It feels strange here, I know. The idea was trying to limit the namespace a plugin can be applied to and avoid polluting other namespaces. This is one of the key reasons why I wanna redesign the plugin
 
@@ -74,9 +74,9 @@ interface Handler<Payload = any> {
 }
 ```
 
-The `setupQuery` function is much simpler compared to `setupBuild`. The QueryEnhancer is just an object describing the namespace it should be registered on with a corresponding handler.
+The `setupQuery` function is much simpler compared to `setupBuild`. The QueryEnhancer is an object describing the namespace it should be registered on with a corresponding handler.
 
-## Plugin ideas
+## Further plugin ideas
 
 To give you more ideas on what you can achieve with the plugin system, here is a list of plugins that could be built:
 
@@ -84,6 +84,6 @@ To give you more ideas on what you can achieve with the plugin system, here is a
 
 - **plugin-image**: Enable image resizing or format conversion based on configuration by implementing custom `transform` logic
 
-- **plugin-git**: Deriving additional metadata from git, such as last modified date, author etc, using the `transform` hook.
+- **plugin-git**: Derive additional metadata from git, such as last modified date, author etc, using the `transform` hook.
 
-- **plugin-link-preview**: Generating link preview by prefetching the URL and saving its metadata within the `transform` hook.
+- **plugin-link-preview**: Generate link preview by prefetching the URL and saving its metadata within the `transform` hook.
