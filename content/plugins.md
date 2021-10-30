@@ -5,7 +5,7 @@ order: 3
 
 # Plugins
 
-Before going through this section, it is strongly recommended to read the [How it works](./how-it-works) section first.
+Before going through this section, it is strongly recommended to read the [Workflow](./workflow) section first.
 
 ## Built-in plugins
 
