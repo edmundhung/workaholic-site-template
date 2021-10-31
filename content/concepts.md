@@ -1,17 +1,23 @@
 ---
-title: Workflow
+title: Concepts
 order: 2
 ---
 
-# Workflow
+# Concepts
 
 Workaholic makes it a 3-steps process in managing your KV data.
 
 ## 1. Build
 
+![Initialise Phase](./flowchart1.png)
+
 The core of Workaholic handles files similar to an object store. It reads files inside a specific directory recursively until no more file is found. It generates an entry for each file, in which `key` is set as the relative file path and `value` is the content of the file.
 
-With plugins, you can apply different `transform` logic, such as parsing the markdown file into HTML and populating metadata from the front matter, or introduce `derive` logic such as generating an index that includes all entries' metadata for a particular directory.
+![Transform Phase](./flowchart2.png)
+
+With plugins, you can apply different `transform` logic, such as parsing the markdown file into HTML and populating metadata from the front matter, or introduce `index` logic such as generating an index that includes all entries' metadata for a particular directory.
+
+![Index Phase](./flowchart3.png)
 
 This is done in a single command call:
 
@@ -47,7 +53,7 @@ interface Query<Payload = any, Options = Record<string, any>> {
 
 By default, all files parsed are saved in the `data` namespace. For example, if you have a markdown file with file path being `./contents/articles/hello-world.md`, you should be able to retrieve its content and metadata by `query('data', 'articles/hello-world.md')`, assuming `contents` being the source directory in the configuration.
 
-By adding `QueryEnhancer` generated from the plugin, you can extend the query client's functionality by registering a new namespace with the corresponding handlers. For details, please checks the [Plugins](./plugins) section.
+By adding `QueryEnhancer` generated from the plugin, you can extend the query client's functionality by registering a new namespace with the corresponding handlers. For details, please checks the [Plugins](../plugins) page.
 
 To facilitate local testing, Workaholic also provides a little helper which persist your KV data on Miniflare for you:
 

@@ -5,7 +5,7 @@ order: 3
 
 # Plugins
 
-Before going through this section, it is strongly recommended to read the [Workflow](./workflow) section first.
+Before going through this section, it is strongly recommended to read the [Concepts](../concepts) first.
 
 ## Built-in plugins
 
@@ -23,7 +23,7 @@ These plugins will be set only if you have no `plugins` configured in the `wrang
 
 > The plugin interface is highly experimental. The current design is made as a proof of concept. A redesign is very likely to happen before a stable release.
 
-The current plugin design supports 2 different layers: `setupBuild` for customising the build process and `setupQuery` for extending the query functionality.
+The current plugin design supports 2 different hooks: `setupBuild` for customising the build process and `setupQuery` for extending the query functionality.
 
 ### setupBuild
 
@@ -35,7 +35,7 @@ interface SetupBuild {
 interface Build {
   namespace?: string;
   transform?: (entry: Entry) => Entry | Promise<Entry>;
-  derive?: (entries: Entry[]) => Entry[] | Promise<Entry[]>;
+  index?: (entries: Entry[]) => Entry[] | Promise<Entry[]>;
 }
 
 interface Entry {
@@ -45,13 +45,13 @@ interface Entry {
 }
 ```
 
-The first hook provided is `transform`. This is the first customisation you can apply on each entry right after the core finish parsing the source directory. It could be used for parsing specific file formats into JSON and inferring additional data.
+The first pipeline you can setup is `transform`. This is the first customisation you can apply on each entry right after the core finish parsing the source directory. It could be used for parsing specific file formats into JSON and deriving additional data.
 
-The second hook provided is `derive`. It will be called only after the `transform` phase is completed. It is mainly used for indexing. Be aware that this hook should return new entries only. You are also required to provide a `namespace` in the Build object when using this hook. This namespace will be used to prefix the key of each entry returned.
+The second pipeline you can implement is `index`. It will be called only after the `transform` phase is completed. It is mainly used for indexing. Be aware that this function should return new entries only. You are also required to provide a `namespace` in the Build object when using this pipeline. This namespace will be used to prefix the key of each entry returned.
 
 > It feels strange here, I know. The idea was trying to limit the namespace a plugin can be applied to and avoid polluting other namespaces. This is one of the key reasons why I wanna redesign the plugin
 
-Both hooks support async process and are applied in the same order of the plugins defined in the configuration.
+Both pipelines supports asynchronous processing and are applied following the order of the plugins that are defined in the configuration.
 
 ### setupQuery
 
@@ -80,10 +80,10 @@ The `setupQuery` function is much simpler compared to `setupBuild`. The QueryEnh
 
 To give you more ideas on what you can achieve with the plugin system, here is a list of plugins that could be built:
 
-- **plugin-search**: Enable searching for entries based on keywords or tags by generating indexes with the `derive` hook and a query enhancer registered in the `search` namespace.
+- **plugin-search**: Enable searching for entries based on keywords or tags by generating indexes with the `index` pipeline and a query enhancer registered in the `search` namespace.
 
 - **plugin-image**: Enable image resizing or format conversion based on configuration by implementing custom `transform` logic
 
-- **plugin-git**: Derive additional metadata from git, such as last modified date, author etc, using the `transform` hook.
+- **plugin-git**: Derive additional metadata from git, such as last modified date, author etc, using the `transform` pipeline.
 
-- **plugin-link-preview**: Generate link preview by prefetching the URL and saving its metadata within the `transform` hook.
+- **plugin-link-preview**: Generate link preview by prefetching the URL and saving its metadata within the `transform` pipeline.
