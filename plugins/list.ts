@@ -1,12 +1,13 @@
+import type { Build, Entry } from '@workaholic/core';
 import * as plugin from '@workaholic/core/dist/plugins/plugin-list';
 
-export function setupBuild() {
+export function setupBuild(): Build {
   const build = plugin.setupBuild();
 
   return {
     ...build,
-    async derive(entries) {
-      const listEntries = await build.derive(entries);
+    async index(entries: Entry[]): Promise<Entry[]> {
+      const listEntries = await build.index(entries);
       const result = listEntries.map(entry => {
         const references = JSON.parse(entry.value);
 
